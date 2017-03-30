@@ -8,8 +8,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Menu extends BasicGameState {
     private int ID;
     private Image image;
-    private double imageX;
-    private double imageY;
+    private float imageX;
+    private float imageY;
 
     public Menu(int ID) {
         this.setID(ID);
@@ -27,8 +27,8 @@ public class Menu extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         this.image = new Image("res/water.png");
-        this.imageX = 50;
-        this.imageY = 50;
+        this.imageX = 100;
+        this.imageY = 100;
     }
 
     @Override

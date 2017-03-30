@@ -1,13 +1,12 @@
 package game.models;
 
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class Player {
-    private static final float START_PLAYER_X = 200;
-    private static final float START_PLAYER_Y = 45;
+    private static final float START_PLAYER_X = 375;
+    private static final float START_PLAYER_Y = 175;
 
     private float playerX;
     private float playerY;
@@ -38,7 +37,7 @@ public class Player {
         this.setMovingRight();
         this.setMovingDown();
         this.setMovingLeft();
-
+        
         this.setPlayerX(START_PLAYER_X);
         this.setPlayerY(START_PLAYER_Y);
 
