@@ -5,8 +5,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class Player {
-    private static final float START_PLAYER_X = 375;
-    private static final float START_PLAYER_Y = 175;
+    private float startPlayerX = 375;
+    private float startPlayerY = 175;
 
     private float playerX;
     private float playerY;
@@ -38,10 +38,26 @@ public class Player {
         this.setMovingDown();
         this.setMovingLeft();
         
-        this.setPlayerX(START_PLAYER_X);
-        this.setPlayerY(START_PLAYER_Y);
+        this.setPlayerX(0);
+        this.setPlayerY(0);
 
         this.setPlayerDown();
+    }
+
+    public float getStartPlayerX() {
+        return this.startPlayerX;
+    }
+
+    public void setStartPlayerX(float startPlayerX) {
+        this.startPlayerX = startPlayerX;
+    }
+
+    public float getStartPlayerY() {
+        return this.startPlayerY;
+    }
+
+    public void setStartPlayerY(float startPlayerY) {
+        this.startPlayerY = startPlayerY;
     }
 
     public float getPlayerX() {
@@ -169,7 +185,7 @@ public class Player {
     }
 
     public void draw() {
-        this.player.draw(this.getPlayerX(), this.getPlayerY());
+        this.player.draw(startPlayerX, startPlayerY);
     }
 
     public void stop() {
