@@ -45,85 +45,144 @@ public class Play extends BasicGameState {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         Input input = gameContainer.getInput();
 
-        /*if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
-            this.player.setPlayerUp();
-
-            this.player.setPlayerX(this.player.getPlayerX() - i * .1f);
-            this.player.setPlayerY(this.player.getPlayerY() + i * .1f);
-
-            if (this.player.getPlayerX() > -70 && this.player.getPlayerY() < 70) {
-                this.moveUpMap(i, .1f);
-                this.moveLeftMap(i, .1f);
-            } *//*else {
-                this.walkUpPlayer(i, .1f);
-                this.walkLeftPlayer(i, .1f);
-            }*//*
+        if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
+            movePlayerUpLeft(i);
         } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_RIGHT)) {
-            this.player.setPlayerUp();
-
-            this.player.setPlayerX(this.player.getPlayerX() + i * .1f);
-            this.player.setPlayerY(this.player.getPlayerY() + i * .1f);
-
-            this.moveUpMap(i, .1f);
-            this.moveRightMap(i, .1f);
+            movePlayerUpRight(i);
         } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_LEFT)) {
-            this.player.setPlayerDown();
-
-            this.player.setPlayerX(this.player.getPlayerX() - i * .1f);
-            this.player.setPlayerY(this.player.getPlayerY() - i * .1f);
-
-            this.moveDownMap(i, .1f);
-            this.moveLeftMap(i, .1f);
-        } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_RIGHT)) {
-            this.player.setPlayerDown();
-
-            this.player.setPlayerX(this.player.getPlayerX() + i * .1f);
-            this.player.setPlayerY(this.player.getPlayerY() - i * .1f);
-
-            this.moveDownMap(i, .1f);
-            this.moveRightMap(i, .1f);
-        } else*/ if (input.isKeyDown(Input.KEY_UP)) {
-            this.player.setPlayerUp();
-
-            if (shouldMoveMapUpDown()) {
-                this.player.setPlayerY(this.player.getPlayerY() + i * .14f);
-
-                this.moveUpMap(i, .14f);
-            } else {
-                this.walkUpPlayer(i, .14f);
-            }
+            movePlayerDownLeft(i);
+        } else  if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_RIGHT)) {
+            movePlayerDownRight(i);
+        } else if (input.isKeyDown(Input.KEY_UP)) {
+            movePlayerUp(i);
         } else if (input.isKeyDown(Input.KEY_RIGHT)) {
-            this.player.setPlayerRight();
-
-            if (shouldMoveMapRightLeft()) {
-                this.player.setPlayerX(this.player.getPlayerX() + i *.14f);
-
-                this.moveRightMap(i, .14f);
-            } else {
-                this.walkRightPlayer(i, .14f);
-            }
+            movePlayerRight(i);
         } else if (input.isKeyDown(Input.KEY_DOWN)) {
-            this.player.setPlayerDown();
-
-            if (shouldMoveMapUpDown()) {
-                this.player.setPlayerY(this.player.getPlayerY() - i * .14f);
-
-                this.moveDownMap(i,.14f);
-            } else {
-                walkDownPlayer(i, .14f);
-            }
+            movePlayerDown(i);
         } else if (input.isKeyDown(Input.KEY_LEFT)) {
-            this.player.setPlayerLeft();
-
-            if (shouldMoveMapRightLeft()) {
-                this.player.setPlayerX(this.player.getPlayerX() - i * .14f);
-
-                this.moveLeftMap(i,.14f);
-            } else {
-                walkLeftPlayer(i, .14f);
-            }
+            movePlayerLeft(i);
         } else {
             this.player.stop();
+        }
+    }
+
+    private void movePlayerUpLeft(int i) throws SlickException {
+        this.player.setPlayerUp();
+
+        if (this.shouldMoveMapUpDown() && this.shouldMoveMapRightLeft()) {
+            this.moveUpMap(i, .1f);
+            this.moveLeftMap(i, .1f);
+        } else if (shouldMoveMapUpDown()) {
+            this.moveUpMap(i, .1f);
+
+            this.walkLeftPlayer(i, .1f);
+        } else if (shouldMoveMapRightLeft()) {
+            this.moveLeftMap(i, .1f);
+
+            this.walkUpPlayer(i, .1f);
+        } else {
+            this.walkUpPlayer(i, .1f);
+            this.walkLeftPlayer(i, .1f);
+        }
+    }
+
+    private void movePlayerUpRight(int i) throws SlickException {
+        this.player.setPlayerUp();
+
+        if (this.shouldMoveMapUpDown() && this.shouldMoveMapRightLeft()) {
+            this.moveUpMap(i, .1f);
+            this.moveRightMap(i, .1f);
+        } else if (this.shouldMoveMapUpDown()) {
+            this.moveUpMap(i, .1f);
+
+            this.walkRightPlayer(i, .1f);
+        } else if (this.shouldMoveMapRightLeft()) {
+            this.moveRightMap(i, .1f);
+
+            this.walkUpPlayer(i, .1f);
+        } else {
+            this.walkUpPlayer(i, .1f);
+            this.walkRightPlayer(i, .1f);
+        }
+    }
+
+    private void movePlayerDownLeft(int i) throws SlickException {
+        this.player.setPlayerDown();
+
+        if (this.shouldMoveMapUpDown() && this.shouldMoveMapRightLeft()) {
+            this.moveDownMap(i, .1f);
+            this.moveLeftMap(i, .1f);
+        } else if (this.shouldMoveMapUpDown()) {
+            this.moveDownMap(i, .1f);
+
+            this.walkLeftPlayer(i, .1f);
+        } else if (this.shouldMoveMapRightLeft()) {
+            this.moveLeftMap(i, .1f);
+
+            this.walkDownPlayer(i, .1f);
+        } else {
+            this.walkDownPlayer(i, .1f);
+            this.walkLeftPlayer(i, .1f);
+        }
+    }
+
+    private void movePlayerDownRight(int i) throws SlickException {
+        this.player.setPlayerDown();
+
+        if (this.shouldMoveMapUpDown() && this.shouldMoveMapRightLeft()) {
+            this.moveDownMap(i, .1f);
+            this.moveRightMap(i, .1f);
+        } else if (this.shouldMoveMapUpDown()) {
+            this.moveDownMap(i, .1f);
+
+            this.walkRightPlayer(i, .1f);
+        } else if (this.shouldMoveMapRightLeft()) {
+            this.moveRightMap(i, .1f);
+
+            this.walkDownPlayer(i, .1f);
+        } else {
+            this.walkDownPlayer(i, .1f);
+            this.walkRightPlayer(i, .1f);
+        }
+    }
+
+    private void movePlayerUp(int i) throws SlickException {
+        this.player.setPlayerUp();
+
+        if (this.shouldMoveMapUpDown()) {
+            this.moveUpMap(i, .14f);
+        } else {
+            this.walkUpPlayer(i, .14f);
+        }
+    }
+
+    private void movePlayerRight(int i) throws SlickException {
+        this.player.setPlayerRight();
+
+        if (this.shouldMoveMapRightLeft()) {
+            this.moveRightMap(i, .14f);
+        } else {
+            this.walkRightPlayer(i, .14f);
+        }
+    }
+
+    private void movePlayerDown(int i) throws SlickException {
+        this.player.setPlayerDown();
+
+        if (this.shouldMoveMapUpDown()) {
+            this.moveDownMap(i,.14f);
+        } else {
+            walkDownPlayer(i, .14f);
+        }
+    }
+
+    private void movePlayerLeft(int i) throws SlickException {
+        this.player.setPlayerLeft();
+
+        if (this.shouldMoveMapRightLeft()) {
+            this.moveLeftMap(i,.14f);
+        } else {
+            walkLeftPlayer(i, .14f);
         }
     }
 
@@ -139,23 +198,29 @@ public class Play extends BasicGameState {
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
 
-
     private void moveDownMap(int i, float flag) {
+        this.player.setPlayerY(this.player.getPlayerY() - i * flag);
+
         this.mapY -= i * flag;
     }
 
     private void moveRightMap(int i, float flag) {
+        this.player.setPlayerX(this.player.getPlayerX() + i * flag);
+
         this.mapX -= i * flag;
     }
 
     private void moveLeftMap(int i, float flag) {
+        this.player.setPlayerX(this.player.getPlayerX() - i * flag);
+
         this.mapX += i * flag;
     }
 
     private void moveUpMap(int i, float flag) {
+        this.player.setPlayerY(this.player.getPlayerY() + i * flag);
+
         this.mapY += i * flag;
     }
-
 
     private void walkUpPlayer(int i, float flag) {
         if (this.player.getPlayerY() < 350) {
@@ -189,8 +254,8 @@ public class Play extends BasicGameState {
 
     private void walkLeftPlayer(int i, float flag) {
         if (this.player.getPlayerX() > -520) {
-            this.player.setStartPlayerX(this.player.getStartPlayerX() - i * flag)
-            ;
+            this.player.setStartPlayerX(this.player.getStartPlayerX() - i * flag);
+
             this.player.setPlayerX(this.player.getPlayerX() - i * flag);
         } else {
             this.player.stop();
