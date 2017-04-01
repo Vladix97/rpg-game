@@ -8,6 +8,15 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Play extends BasicGameState {
     private int ID;
 
+    /*
+    ###IMPORTANT###
+    If map is changed OR mapX and mapY are changed
+        -change player boundaries
+            --walkUP/RIGHT/DOWN/LEFT
+        -change camera boundaries
+            --shouldMoveMap...
+     */
+
     private Image worldMap;
     private float mapX = -100;
     private float mapY = -100;
@@ -61,6 +70,8 @@ public class Play extends BasicGameState {
             movePlayerDown(i);
         } else if (input.isKeyDown(Input.KEY_LEFT)) {
             movePlayerLeft(i);
+        } else if (input.isKeyDown(Input.KEY_SPACE)) {
+            this.player.attackDown();
         } else {
             this.player.stop();
         }
@@ -193,10 +204,6 @@ public class Play extends BasicGameState {
     private boolean shouldMoveMapRightLeft() {
         return this.player.getPlayerX() > -70 && this.player.getPlayerX() < 180;
     }
-
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------
 
     private void moveDownMap(int i, float flag) {
         this.player.setPlayerY(this.player.getPlayerY() - i * flag);

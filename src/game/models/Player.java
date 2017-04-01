@@ -11,7 +11,8 @@ public class Player {
     private float playerX;
     private float playerY;
 
-    private Animation player;
+    public Animation player;
+    public Animation prevPlayer;
 
     private Image[] walkUpImages;
     private Image[] walkRightImages;
@@ -23,6 +24,10 @@ public class Player {
     private Animation movingDown;
     private Animation movingLeft;
 
+    private Image[] attackDownImages;
+
+    private Animation attackDown;
+
     private int[] animationDuration;
 
     public Player() throws SlickException {
@@ -32,6 +37,15 @@ public class Player {
         this.setWalkRightImages();
         this.setWalkDownImages();
         this.setWalkLeftImages();
+
+        //-------------------------------------
+        this.attackDownImages = new Image[] {
+                new Image("res/player.sprites/attacking/attack.down/1.png"),
+                new Image("res/player.sprites/attacking/attack.down/2.png")
+        };
+
+        this.setAttackDownImages();
+        //-------------------------------------
 
         this.setMovingUp();
         this.setMovingRight();
@@ -43,6 +57,8 @@ public class Player {
 
         this.setPlayerDown();
     }
+
+
 
     public float getStartPlayerX() {
         return this.startPlayerX;
@@ -77,18 +93,22 @@ public class Player {
     }
 
     public void setPlayerUp() throws SlickException {
+        this.prevPlayer = this.getMovingUp();
         this.player = this.getMovingUp();
     }
 
     public void setPlayerDown() throws SlickException {
-         this.player = this.getMovingDown();
+        this.prevPlayer = this.getMovingDown();
+        this.player = this.getMovingDown();
     }
 
     public void setPlayerRight() throws SlickException {
+        this.prevPlayer = this.getMovingRight();
         this.player = this.getMovingRight();
     }
 
     public void setPlayerLeft() throws SlickException {
+        this.prevPlayer = this.getMovingLeft();
         this.player = this.getMovingLeft();
     }
 
@@ -106,10 +126,10 @@ public class Player {
 
     private void setWalkUpImages() throws SlickException {
         this.walkUpImages = new Image[] {
-                new Image("res/playerSprites/walking/walkUp/up1.png"),
-                new Image("res/playerSprites/walking/walkUp/up2.png"),
-                new Image("res/playerSprites/walking/walkUp/up3.png"),
-                new Image("res/playerSprites/walking/walkUp/up4.png")
+                new Image("res/player.sprites/walking/walk.up/up1.png"),
+                new Image("res/player.sprites/walking/walk.up/up2.png"),
+                new Image("res/player.sprites/walking/walk.up/up3.png"),
+                new Image("res/player.sprites/walking/walk.up/up4.png")
         };
     }
 
@@ -119,10 +139,10 @@ public class Player {
 
     private void setWalkRightImages() throws SlickException {
         this.walkRightImages = new Image[] {
-                new Image("res/playerSprites/walking/walkRight/right1.png"),
-                new Image("res/playerSprites/walking/walkRight/right2.png"),
-                new Image("res/playerSprites/walking/walkRight/right3.png"),
-                new Image("res/playerSprites/walking/walkRight/right4.png")
+                new Image("res/player.sprites/walking/walk.right/right1.png"),
+                new Image("res/player.sprites/walking/walk.right/right2.png"),
+                new Image("res/player.sprites/walking/walk.right/right3.png"),
+                new Image("res/player.sprites/walking/walk.right/right4.png")
         };
     }
 
@@ -132,10 +152,10 @@ public class Player {
 
     private void setWalkDownImages() throws SlickException {
         this.walkDownImages = new Image[] {
-                new Image("res/playerSprites/walking/walkDown/down1.png"),
-                new Image("res/playerSprites/walking/walkDown/down2.png"),
-                new Image("res/playerSprites/walking/walkDown/down3.png"),
-                new Image("res/playerSprites/walking/walkDown/down4.png")
+                new Image("res/player.sprites/walking/walk.down/down1.png"),
+                new Image("res/player.sprites/walking/walk.down/down2.png"),
+                new Image("res/player.sprites/walking/walk.down/down3.png"),
+                new Image("res/player.sprites/walking/walk.down/down4.png")
         };
     }
 
@@ -145,10 +165,10 @@ public class Player {
 
     private void setWalkLeftImages() throws SlickException {
        this.walkLeftImages = new Image[] {
-               new Image("res/playerSprites/walking/walkLeft/left1.png"),
-               new Image("res/playerSprites/walking/walkLeft/left2.png"),
-               new Image("res/playerSprites/walking/walkLeft/left3.png"),
-               new Image("res/playerSprites/walking/walkLeft/left4.png")
+               new Image("res/player.sprites/walking/walk.left/left1.png"),
+               new Image("res/player.sprites/walking/walk.left/left2.png"),
+               new Image("res/player.sprites/walking/walk.left/left3.png"),
+               new Image("res/player.sprites/walking/walk.left/left4.png")
        };
     }
 
@@ -184,11 +204,20 @@ public class Player {
         this.movingLeft = new Animation(this.getWalkLeftImages(), this.getAnimationDuration(), true);
     }
 
+    private void setAttackDownImages() {
+        this.attackDown = new Animation(this.attackDownImages, new int[] { 10, 1000 }, true);
+    }
+
+    public void attackDown() {
+        this.player = this.attackDown;
+    }
+
     public void draw() {
         this.player.draw(startPlayerX, startPlayerY);
     }
 
     public void stop() {
+        this.player = this.prevPlayer;
         this.player.restart();
     }
 }

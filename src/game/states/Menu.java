@@ -6,10 +6,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class Menu extends BasicGameState {
-    private int ID;
-    private Image image;
-    private float imageX;
-    private float imageY;
+     private int ID;
+
+    int a = 10000;
 
     public Menu(int ID) {
         this.setID(ID);
@@ -26,32 +25,20 @@ public class Menu extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        this.image = new Image("res/water.png");
-        this.imageX = 100;
-        this.imageY = 100;
+
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        graphics.drawImage(this.image, (int)this.imageX, (int)this.imageY);
+        graphics.drawString(String.format("A: %d", a), 50, 50);
+
+        if (a == 0) {
+            stateBasedGame.enterState(1);
+        }
     }
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
-        Input input = gameContainer.getInput();
-
-        int xpos = input.getMouseX();
-        int ypos = input.getMouseY();
-
-        if (input.isKeyDown(Input.KEY_UP)) {
-            this.imageY -= 0.1;
-        } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_RIGHT)) {
-            this.imageY++;
-            this.imageX++;
-        } else if (input.isKeyDown(Input.KEY_RIGHT)) {
-            this.imageX++;
-        } else if (input.isKeyDown(Input.KEY_LEFT)) {
-            this.imageX--;
-        }
+        a -= 5;
     }
 }
