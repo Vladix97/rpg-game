@@ -6,7 +6,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class Menu extends BasicGameState {
-     private int ID;
+    private int ID;
 
     int a = 10000;
 
