@@ -48,6 +48,7 @@ public class Play extends BasicGameState {
         this.player.draw();
 
         graphics.drawString(String.format("Player X: %.2f; Y: %.2f", this.player.getPlayerX(), this.player.getPlayerY()), 50, 50);
+        graphics.drawString(String.format("Player MANA: %d", this.player.mana), 50, 70);
     }
 
     @Override
@@ -70,19 +71,26 @@ public class Play extends BasicGameState {
             movePlayerDown(i);
         } else if (input.isKeyDown(Input.KEY_LEFT)) {
             movePlayerLeft(i);
-        } else if (input.isKeyDown(Input.KEY_SPACE)) {
+        } else if (input.isKeyPressed(Input.KEY_SPACE) && this.player.mana == 500) {
             this.player.attack();
+            this.player.shouldLower = true;
         } else {
-            this.player.stop();
-        }
-    }
+            if (this.player.isAttacking && this.player.mana > 450) {
+                this.player.mana--;
+            } else {
+                this.player.isAttacking = false;
+                this.player.player = this.player.prevPlayer;
+                if (this.player.shouldLower) {
+                    this.player.mana--;
+                }
 
-    private boolean anyKeyPressed(Input input) {
-        return input.isKeyDown(Input.KEY_RIGHT) ||
-                input.isKeyDown(Input.KEY_DOWN) ||
-                input.isKeyDown(Input.KEY_LEFT) ||
-                input.isKeyDown(Input.KEY_UP) ||
-                input.isKeyDown(Input.KEY_SPACE);
+                if (this.player.mana == 0) {
+                    this.player.mana = 500;
+                    this.player.shouldLower = false;
+                }
+                this.player.stop();
+            }
+        }
     }
 
     private void movePlayerUpLeft(int i) throws SlickException {

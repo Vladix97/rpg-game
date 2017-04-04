@@ -5,6 +5,9 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Player {
     // those coordinates place player in the middle of the screen
     private float startPlayerX = 375;
@@ -12,11 +15,16 @@ public class Player {
 
     private float playerX;
     private float playerY;
-    private Animation player;     // current player animation
-    private Animation prevPlayer; // previous player animation
+    public Animation player;     // current player animation
+    public Animation prevPlayer; // previous player animation
 
     private MyAnimation moveAnimation;
     private MyAnimation attackAnimation;
+
+    public int mana = 500;
+
+    public boolean isAttacking;
+    public boolean shouldLower;
 
     public Player() throws SlickException {
         this.initMoveAnimations();
@@ -137,6 +145,8 @@ public class Player {
     }
 
     public void attack() {
+        this.isAttacking = true;
+
         if (this.player.equals(this.moveAnimation.getUpAnimation())) {
             this.attackUp();
         } else if (this.player.equals(this.moveAnimation.getRightAnimation())) {
@@ -171,4 +181,6 @@ public class Player {
     public void stop() {
         this.player.restart();
     }
+
+
 }
