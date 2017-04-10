@@ -55,42 +55,33 @@ public class Play extends BasicGameState {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         Input input = gameContainer.getInput();
 
-        if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
-            movePlayerUpLeft(i);
-        } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_RIGHT)) {
-            movePlayerUpRight(i);
-        } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_LEFT)) {
-            movePlayerDownLeft(i);
-        } else  if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_RIGHT)) {
-            movePlayerDownRight(i);
-        } else if (input.isKeyDown(Input.KEY_UP)) {
-            movePlayerUp(i);
-        } else if (input.isKeyDown(Input.KEY_RIGHT)) {
-            movePlayerRight(i);
-        } else if (input.isKeyDown(Input.KEY_DOWN)) {
-            movePlayerDown(i);
-        } else if (input.isKeyDown(Input.KEY_LEFT)) {
-            movePlayerLeft(i);
-        } else if (input.isKeyPressed(Input.KEY_SPACE) && this.player.mana == 500) {
-            this.player.attack();
-            this.player.shouldLower = true;
-        } else {
-            if (this.player.isAttacking && this.player.mana > 450) {
-                this.player.mana--;
+        if (!this.player.isAttacking()) {
+            if (input.isKeyPressed(Input.KEY_SPACE)) {
+                if (this.player.canAttack()) {
+                    this.player.attack();
+                }
+            } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
+                movePlayerUpLeft(i);
+            } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_RIGHT)) {
+                movePlayerUpRight(i);
+            } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_LEFT)) {
+                movePlayerDownLeft(i);
+            } else if (input.isKeyDown(Input.KEY_DOWN) && input.isKeyDown(Input.KEY_RIGHT)) {
+                movePlayerDownRight(i);
+            } else if (input.isKeyDown(Input.KEY_UP)) {
+                movePlayerUp(i);
+            } else if (input.isKeyDown(Input.KEY_RIGHT)) {
+                movePlayerRight(i);
+            } else if (input.isKeyDown(Input.KEY_DOWN)) {
+                movePlayerDown(i);
+            } else if (input.isKeyDown(Input.KEY_LEFT)) {
+                movePlayerLeft(i);
             } else {
-                this.player.isAttacking = false;
-                this.player.player = this.player.prevPlayer;
-                if (this.player.shouldLower) {
-                    this.player.mana--;
-                }
-
-                if (this.player.mana == 0) {
-                    this.player.mana = 500;
-                    this.player.shouldLower = false;
-                }
                 this.player.stop();
             }
         }
+
+        this.player.regenMana();
     }
 
     private void movePlayerUpLeft(int i) throws SlickException {
@@ -197,7 +188,7 @@ public class Play extends BasicGameState {
         this.player.movePlayerDown();
 
         if (this.shouldMoveMapUpDown()) {
-            this.moveDownMap(i,.14f);
+            this.moveDownMap(i, .14f);
         } else {
             walkDownPlayer(i, .14f);
         }
@@ -207,7 +198,7 @@ public class Play extends BasicGameState {
         this.player.movePlayerLeft();
 
         if (this.shouldMoveMapRightLeft()) {
-            this.moveLeftMap(i,.14f);
+            this.moveLeftMap(i, .14f);
         } else {
             walkLeftPlayer(i, .14f);
         }

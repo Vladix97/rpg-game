@@ -25,7 +25,7 @@ public class Game extends StateBasedGame {
         this.getState(MENU_ID).init(gameContainer, this);
         this.getState(PLAY_ID).init(gameContainer, this);
 
-        this.enterState(PLAY_ID);
+        this.enterState(MENU_ID);
     }
 
     public static void main(String[] args) {

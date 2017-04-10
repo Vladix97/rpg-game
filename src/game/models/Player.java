@@ -144,8 +144,29 @@ public class Player {
         this.player = this.moveAnimation.getLeftAnimation();
     }
 
+    public boolean canAttack() {
+        return this.mana == 500;
+    }
+
+    public void regenMana() {
+        if (this.mana < 500) {
+            this.mana++;
+        }
+    }
+
+    public boolean isAttacking() {
+        if (this.mana >= 50) {
+            this.isAttacking = false;
+            this.player = this.prevPlayer;
+            return false;
+        }
+
+        return true;
+    }
+
     public void attack() {
-        this.isAttacking = true;
+//        this.isAttacking = true;
+        this.mana = 0;
 
         if (this.player.equals(this.moveAnimation.getUpAnimation())) {
             this.attackUp();
@@ -181,6 +202,4 @@ public class Player {
     public void stop() {
         this.player.restart();
     }
-
-
 }
