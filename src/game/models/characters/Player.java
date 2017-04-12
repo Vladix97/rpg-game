@@ -1,30 +1,28 @@
-package game.models;
+package game.models.characters;
 
-import game.models.animations.MyAnimation;
+import game.models.animations.CharacterAnimation;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 public class Player {
-    // those coordinates place player in the middle of the screen
+    private static final int START_HEALTH = 500;
+    private static final int START_MANA = 500;
+
+    // Those coordinates place player in the middle of the screen
     private float startPlayerX = 375;
     private float startPlayerY = 175;
 
     private float playerX;
     private float playerY;
-    public Animation player;     // current player animation
-    public Animation prevPlayer; // previous player animation
+    private Animation player;     // Current player animation
+    private Animation prevPlayer; // Previous player animation
 
-    private MyAnimation moveAnimation;
-    private MyAnimation attackAnimation;
+    private CharacterAnimation moveAnimation;
+    private CharacterAnimation attackAnimation;
 
-    public int mana = 500;
-
-    public boolean isAttacking;
-    public boolean shouldLower;
+    private int health = START_HEALTH;
+    private int mana = START_MANA;
 
     public Player() throws SlickException {
         this.initMoveAnimations();
@@ -34,6 +32,9 @@ public class Player {
         this.setStartPlayerY(startPlayerY);
         this.setPlayerX(0);
         this.setPlayerY(0);
+
+        this.setHealth(START_HEALTH);
+        this.setMana(START_MANA);
 
         this.movePlayerDown();
     }
@@ -68,7 +69,7 @@ public class Player {
                 new Image("res/player/walking/left/4.png"),
         };
 
-        this.moveAnimation = new MyAnimation(moveAnimationDuration, upMoveImages, rightMoveImages, downMoveImages, leftMoveImages);
+        this.moveAnimation = new CharacterAnimation(moveAnimationDuration, upMoveImages, rightMoveImages, downMoveImages, leftMoveImages);
     }
 
     private void initAttackAnimations() throws SlickException {
@@ -89,9 +90,11 @@ public class Player {
                 new Image("res/player/attacking/left/1.png"),
         };
 
-        this.attackAnimation = new MyAnimation(moveAnimationDuration, upAttackImages, rightAttackImages, downAttackImages, leftAttackImages);
+        this.attackAnimation = new CharacterAnimation(moveAnimationDuration, upAttackImages, rightAttackImages, downAttackImages, leftAttackImages);
     }
 
+
+    //-----------------COORDINATES
     public float getStartPlayerX() {
         return this.startPlayerX;
     }
@@ -124,6 +127,9 @@ public class Player {
         this.playerY = playerY;
     }
 
+    //-------------------------------------------------------------------------------------------------------------------
+
+    //-----------------MOVING
     public void movePlayerUp() throws SlickException {
         this.prevPlayer = this.moveAnimation.getUpAnimation();
         this.player = this.moveAnimation.getUpAnimation();
@@ -148,15 +154,40 @@ public class Player {
         return this.mana == 500;
     }
 
+    //-------------------------------------------------------------------------------------------------------------------
+
+    //-----------------HEALTH
+    public int getHealth() {
+        return this.health;
+    }
+
+    private void setHealth(int health) {
+        this.health = health;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+
+    //-----------------MANA
+    public int getMana() {
+        return this.mana;
+    }
+
+    private void setMana(int mana) {
+        this.mana = mana;
+    }
+
     public void regenMana() {
         if (this.mana < 500) {
             this.mana++;
         }
     }
 
+    //-------------------------------------------------------------------------------------------------------------------
+
+     //-----------------ATTACKING
     public boolean isAttacking() {
         if (this.mana >= 50) {
-            this.isAttacking = false;
+            boolean isAttacking = false;
             this.player = this.prevPlayer;
             return false;
         }
@@ -165,7 +196,6 @@ public class Player {
     }
 
     public void attack() {
-//        this.isAttacking = true;
         this.mana = 0;
 
         if (this.player.equals(this.moveAnimation.getUpAnimation())) {
@@ -194,6 +224,8 @@ public class Player {
     private void attackLeft() {
         this.player = this.attackAnimation.getLeftAnimation();
     }
+
+    //-------------------------------------------------------------------------------------------------------------------
 
     public void draw() {
         this.player.draw(startPlayerX, startPlayerY);

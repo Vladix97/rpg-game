@@ -3,7 +3,7 @@ package game.models.animations;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 
-public class MyAnimation {
+public class CharacterAnimation {
 
     private int[] animationDuration;
 
@@ -13,8 +13,8 @@ public class MyAnimation {
     private Animation leftAnimation;
 
 
-    public MyAnimation(int[] animationDuration,
-                          Image[] upImages, Image[] rightImages, Image[] downImages, Image[] leftImages) {
+    public CharacterAnimation(int[] animationDuration,
+                              Image[] upImages, Image[] rightImages, Image[] downImages, Image[] leftImages) {
         this.animationDuration = animationDuration;
 
         this.upAnimation = new Animation(upImages, this.animationDuration);

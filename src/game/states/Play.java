@@ -1,6 +1,9 @@
 package game.states;
 
-import game.models.Player;
+import game.models.bars.Bar;
+import game.models.bars.HealthBar;
+import game.models.bars.ManaBar;
+import game.models.characters.Player;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -21,6 +24,9 @@ public class Play extends BasicGameState {
     private float mapX = -100;
     private float mapY = -100;
 
+    private Bar healthBar;
+    private Bar manaBar;
+
     private Player player;
 
     public Play(int ID) {
@@ -39,16 +45,24 @@ public class Play extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         this.player = new Player();
+
+        this.healthBar = new HealthBar("res/bars/hp/hp0.png", this.player.getHealth());
+        this.manaBar = new ManaBar("res/bars/mana/mana0.png", this.player.getMana());
+
         this.worldMap = new Image("res/map/background/background.png");
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         this.worldMap.draw(mapX, mapY);
+
         this.player.draw();
 
-        graphics.drawString(String.format("Player X: %.2f; Y: %.2f", this.player.getPlayerX(), this.player.getPlayerY()), 50, 50);
-        graphics.drawString(String.format("Player MANA: %d", this.player.mana), 50, 70);
+        graphics.drawString(String.format("Player X: %.2f; Y: %.2f", this.player.getPlayerX(), this.player.getPlayerY()), 300, 50);
+//        graphics.drawString(String.format("MANA: %d", this.player.getMana()), 300, 70);
+
+        this.healthBar.draw();
+        this.manaBar.draw();
     }
 
     @Override
@@ -56,10 +70,8 @@ public class Play extends BasicGameState {
         Input input = gameContainer.getInput();
 
         if (!this.player.isAttacking()) {
-            if (input.isKeyPressed(Input.KEY_SPACE)) {
-                if (this.player.canAttack()) {
-                    this.player.attack();
-                }
+            if (input.isKeyPressed(Input.KEY_SPACE) && this.player.canAttack()) {
+                this.player.attack();
             } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
                 movePlayerUpLeft(i);
             } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_RIGHT)) {
@@ -81,6 +93,7 @@ public class Play extends BasicGameState {
             }
         }
 
+        this.manaBar.setValue(this.player.getMana());
         this.player.regenMana();
     }
 
