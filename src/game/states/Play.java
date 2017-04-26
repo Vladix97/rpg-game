@@ -3,6 +3,7 @@ package game.states;
 import game.models.bars.Bar;
 import game.models.bars.HealthBar;
 import game.models.bars.ManaBar;
+import game.models.characters.Enemy;
 import game.models.characters.Player;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -20,6 +21,8 @@ public class Play extends BasicGameState {
             --shouldMoveMap...
      */
 
+    boolean trigger = false;
+
     private Image worldMap;
     private float mapX = -100;
     private float mapY = -100;
@@ -28,6 +31,7 @@ public class Play extends BasicGameState {
     private Bar manaBar;
 
     private Player player;
+    private Enemy enemy;
 
     public Play(int ID) {
         this.setID(ID);
@@ -45,6 +49,7 @@ public class Play extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         this.player = new Player();
+        this.enemy = new Enemy();
 
         this.healthBar = new HealthBar("res/bars/hp/hp0.png", this.player.getHealth());
         this.manaBar = new ManaBar("res/bars/mana/mana0.png", this.player.getMana());
@@ -57,9 +62,15 @@ public class Play extends BasicGameState {
         this.worldMap.draw(mapX, mapY);
 
         this.player.draw();
+        this.enemy.draw();
 
-        graphics.drawString(String.format("Player X: %.2f; Y: %.2f", this.player.getPlayerX(), this.player.getPlayerY()), 300, 50);
-//        graphics.drawString(String.format("MANA: %d", this.player.getMana()), 300, 70);
+        graphics.drawString(String.format("START X: %.2f; Y: %.2f", this.player.getStartPlayerX(), this.player.getStartPlayerY()), 300, 30);
+        graphics.drawString(String.format("CURRENT X: %.2f; Y: %.2f", this.player.getPlayerX(), this.player.getPlayerY()), 300, 50);
+
+        graphics.drawString(String.format("START X: %.2f; Y: %.2f", this.enemy.getStartPlayerX(), this.enemy.getStartPlayerY()), 300, 70);
+        graphics.drawString(String.format("CURRENT X: %.2f; Y: %.2f", this.enemy.getPlayerX(), this.enemy.getPlayerY()), 300, 90);
+
+        graphics.drawString(Boolean.toString(this.trigger).toUpperCase(), 300, 110);
 
         this.healthBar.draw();
         this.manaBar.draw();
@@ -69,9 +80,28 @@ public class Play extends BasicGameState {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         Input input = gameContainer.getInput();
 
+        if (this.enemy.getPlayerX() - 20 < this.player.getPlayerX() &&
+                this.enemy.getPlayerX() + 35 > this.player.getPlayerX() &&
+                this.enemy.getPlayerY() + 85 > this.player.getPlayerY() &&
+                this.enemy.getPlayerY() - 95 < this.player.getPlayerY()) {
+            this.trigger = true;
+        } else {
+            this.trigger = false;
+        }
+
         if (!this.player.isAttacking()) {
             if (input.isKeyPressed(Input.KEY_SPACE) && this.player.canAttack()) {
                 this.player.attack();
+                switch (this.player.direction) {
+                    case "up":
+                        break;
+                    case "right":
+                        break;
+                    case "down":
+                        break;
+                    case "left":
+                        break;
+                }
             } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_LEFT)) {
                 movePlayerUpLeft(i);
             } else if (input.isKeyDown(Input.KEY_UP) && input.isKeyDown(Input.KEY_RIGHT)) {
@@ -182,6 +212,7 @@ public class Play extends BasicGameState {
 
         if (this.shouldMoveMapUpDown()) {
             this.moveUpMap(i, .14f);
+            this.enemy.setStartPlayerY(this.enemy.getStartPlayerY() + i * .14f);
         } else {
             this.walkUpPlayer(i, .14f);
         }
@@ -192,6 +223,8 @@ public class Play extends BasicGameState {
 
         if (this.shouldMoveMapRightLeft()) {
             this.moveRightMap(i, .14f);
+
+            this.enemy.setStartPlayerX(this.enemy.getStartPlayerX() - i * .14f);
         } else {
             this.walkRightPlayer(i, .14f);
         }
@@ -202,6 +235,8 @@ public class Play extends BasicGameState {
 
         if (this.shouldMoveMapUpDown()) {
             this.moveDownMap(i, .14f);
+
+            this.enemy.setStartPlayerY(this.enemy.getStartPlayerY() - i * .14f);
         } else {
             walkDownPlayer(i, .14f);
         }
@@ -212,6 +247,8 @@ public class Play extends BasicGameState {
 
         if (this.shouldMoveMapRightLeft()) {
             this.moveLeftMap(i, .14f);
+
+            this.enemy.setStartPlayerX(this.enemy.getStartPlayerX() + i * .14f);
         } else {
             walkLeftPlayer(i, .14f);
         }

@@ -17,12 +17,14 @@ public class Player {
     private float playerY;
     private Animation player;     // Current player animation
     private Animation prevPlayer; // Previous player animation
+    public String direction;
+
 
     private CharacterAnimation moveAnimation;
     private CharacterAnimation attackAnimation;
 
-    private int health = START_HEALTH;
-    private int mana = START_MANA;
+    private int health;
+    private int mana;
 
     public Player() throws SlickException {
         this.initMoveAnimations();
@@ -37,6 +39,7 @@ public class Player {
         this.setMana(START_MANA);
 
         this.movePlayerDown();
+        this.direction = "down";
     }
 
     private void initMoveAnimations() throws SlickException {
@@ -133,21 +136,25 @@ public class Player {
     public void movePlayerUp() throws SlickException {
         this.prevPlayer = this.moveAnimation.getUpAnimation();
         this.player = this.moveAnimation.getUpAnimation();
+        this.direction = "up";
     }
 
     public void movePlayerRight() throws SlickException {
         this.prevPlayer = this.moveAnimation.getRightAnimation();
         this.player = this.moveAnimation.getRightAnimation();
+        this.direction = "right";
     }
 
     public void movePlayerDown() throws SlickException {
         this.prevPlayer = this.moveAnimation.getDownAnimation();
         this.player = this.moveAnimation.getDownAnimation();
+        this.direction = "down";
     }
 
     public void movePlayerLeft() throws SlickException {
         this.prevPlayer = this.moveAnimation.getLeftAnimation();
         this.player = this.moveAnimation.getLeftAnimation();
+        this.direction = "left";
     }
 
     public boolean canAttack() {
