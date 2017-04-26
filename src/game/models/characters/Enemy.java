@@ -14,10 +14,10 @@ public class Enemy {
 
     private float playerX = 257;
     private float playerY = 208;
-    private Animation enemey;     // Current player animation
+    public Animation enemey;     // Current player animation
 
-    private Animation leftEnememyAnimation;
-    private Animation rightEnemyAnimation;
+    public Animation leftEnememyAnimation;
+    public Animation rightEnemyAnimation;
 
 
     public Enemy() throws SlickException {

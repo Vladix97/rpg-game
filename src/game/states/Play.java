@@ -22,6 +22,7 @@ public class Play extends BasicGameState {
      */
 
     boolean trigger = false;
+    boolean moveRight = true;
 
     private Image worldMap;
     private float mapX = -100;
@@ -80,12 +81,15 @@ public class Play extends BasicGameState {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         Input input = gameContainer.getInput();
 
-        if (this.enemy.getPlayerX() - 20 < this.player.getPlayerX() &&
-                this.enemy.getPlayerX() + 35 > this.player.getPlayerX() &&
+
+
+        if (this.enemy.getPlayerX() - 60 < this.player.getPlayerX() &&
+                this.enemy.getPlayerX() + 75 > this.player.getPlayerX() &&
                 this.enemy.getPlayerY() + 85 > this.player.getPlayerY() &&
-                this.enemy.getPlayerY() - 95 < this.player.getPlayerY()) {
+                this.enemy.getPlayerY() - 85 < this.player.getPlayerY()) {
             this.trigger = true;
         } else {
+            moveZombie(i);
             this.trigger = false;
         }
 
@@ -125,6 +129,25 @@ public class Play extends BasicGameState {
 
         this.manaBar.setValue(this.player.getMana());
         this.player.regenMana();
+    }
+
+    private void moveZombie(int i) {
+        if (this.enemy.getStartPlayerX() < 700 && this.moveRight) {
+            this.enemy.enemey = this.enemy.rightEnemyAnimation;
+
+            this.enemy.setStartPlayerX(this.enemy.getStartPlayerX() + i * .04f);
+            this.enemy.setPlayerX(this.enemy.getPlayerX() + i * .04f);
+        } else {
+            this.enemy.enemey = this.enemy.leftEnememyAnimation;
+
+            this.moveRight = false;
+            this.enemy.setStartPlayerX(this.enemy.getStartPlayerX() - i * .04f);
+            this.enemy.setPlayerX(this.enemy.getPlayerX() - i * .04f);
+
+            if (this.enemy.getPlayerX() <= 257) {
+                this.moveRight = true;
+            }
+        }
     }
 
     private void movePlayerUpLeft(int i) throws SlickException {
